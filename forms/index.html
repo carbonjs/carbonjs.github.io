@@ -1,0 +1,248 @@
+<!DOCTYPE html><html><head><title>CarbonJS Forms - Zend-like forms in Node.js</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="../assets/3rd-party/bootstrap/css/bootstrap.min.css" rel="stylesheet"><script src="../assets/3rd-party/jquery/js/jquery-2.1.4.min.js">   </script><script src="../assets/3rd-party/bootstrap/js/bootstrap.min.js"></script><script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script><style type="text/css">h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+#header {
+  background-color: #111;
+  margin-bottom: 50px;
+  padding: 20px;
+}
+      
+#header iframe {
+  position: absolute;
+  right: -165px;
+  top: 10px;
+}
+      
+#header ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+#header ul li {
+  display: inline-block;
+}
+
+#header ul li a {
+  color: #fff;
+  display: block;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+      
+.nav .nav {
+  padding-left: 20px;
+}
+
+.nav li a {
+  padding: 5px 10px;
+}
+
+pre {
+  margin-bottom: 15px;
+}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-form on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-form#stargazers_count" data-count-href="/carbonjs/carbon-form/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-form" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#define-the-form">Define the form</a></li><li><a href="#define-form-layout">Define form layout</a></li><li><a href="#validation-and-rendering">Validation and rendering</a></li></ul></li><li><a href="#elements">Elements</a></li><li><a href="#subforms">Subforms</a></li><li><a href="#who-is-using-it">Who is using it</a></li><li><a href="#contributing">Contributing</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-forms-carbon-form-a-id-intro-a-">CarbonJS Forms / <code>carbon-form</code> <a id="intro"></a></h1>
+<p>The <code>carbon-form</code> module provides Zend-like forms in your projects. It is a complete solution which not only provides rendering but filtering and validation too. It packs all the logic behind HTML forms and it abstracts a lot of work so that you can focus on building awesome web applications and best of all it allows you to define the layout and style your forms any way you want them.</p>
+<p>If you have ever used <code>Zend_Form</code> before you&#39;re going to be familiar with the syntax and if not just keep reading.</p>
+<h2 id="installation-a-id-installation-a-">Installation <a id="installation"></a></h2>
+<pre><code>npm <span class="hljs-keyword">install</span> carbon-<span class="hljs-keyword">form</span> [<span class="hljs-comment">--save]</span>
+</code></pre><h2 id="usage-a-id-usage-a-">Usage <a id="usage"></a></h2>
+<p>The usage is pretty simple. You create a form and then add elements to it. For each element you define a set of options such as name, label, filters, validators, HTML attributes etc. The following example should present most of <code>carbon-form</code> features.</p>
+<h4 id="defining-the-form-file-signup-form-js-a-id-define-the-form-a-">Defining the form (file: <code>signup-form.js</code>) <a id="define-the-form"></a></h4>
+<p>First you need to define your form and elements that it will contain.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> <span class="hljs-type">Form</span> = require(<span class="hljs-string">"carbon-form"</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-type">Filter</span> = require(<span class="hljs-string">"carbon-filter"</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-type">Validate</span> = require(<span class="hljs-string">"carbon-validate"</span>);
+
+module.exports = exports = function(options) {
+    <span class="hljs-keyword">var</span> form = <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>(options);
+
+    form.setAction(<span class="hljs-string">"/signup"</span>);
+    form.setViewScriptFile(<span class="hljs-string">"forms/signup.jade"</span>);
+
+    form.addElements([
+        <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>.<span class="hljs-type">Element</span>.<span class="hljs-type">Text</span>(<span class="hljs-string">"name"</span>, {
+            label: <span class="hljs-string">"Name"</span>,
+            attribs: {
+                <span class="hljs-class"><span class="hljs-keyword">class</span></span>: <span class="hljs-string">"text-field"</span>
+            },
+            filters: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Filter</span>.<span class="hljs-type">StringTrim</span>()
+            ],
+            validators: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">NotEmpty</span>({
+                    messages: {
+                        <span class="hljs-string">"is_empty"</span>: <span class="hljs-string">"Name is required"</span>
+                });
+            ]
+        }),
+        <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>.<span class="hljs-type">Element</span>.<span class="hljs-type">Text</span>(<span class="hljs-string">"email_address"</span>, {
+            label: <span class="hljs-string">"Email address"</span>,
+            attribs: {
+                <span class="hljs-class"><span class="hljs-keyword">class</span></span>: <span class="hljs-string">"text-field"</span>
+            },
+            filters: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Filter</span>.<span class="hljs-type">StringTrim</span>()
+            ],
+            validators: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">NotEmpty</span>({
+                    messages: {
+                        <span class="hljs-string">"is_empty"</span>: <span class="hljs-string">"Email address is required"</span>
+                    }
+                }),
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">StringLength</span>({
+                    max: <span class="hljs-number">255</span>,
+                    messages: {
+                        <span class="hljs-string">"too_long"</span>: <span class="hljs-string">"Email address can't be longer than %max% characters"</span>
+                    }
+                }),
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">EmailAddress</span>(),
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">DbNoRecordExists</span>({
+                    adapter: <span class="hljs-string">"mongoose"</span>,
+                    collection: <span class="hljs-string">"users"</span>,
+                    field: <span class="hljs-string">"email_address"</span>,
+                    messages: {
+                        <span class="hljs-string">"record_found"</span>: <span class="hljs-string">"Email address is already in the database"</span>
+                    }
+                })
+            ]
+        }),
+        <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>.<span class="hljs-type">Element</span>.<span class="hljs-type">Password</span>(<span class="hljs-string">"password1"</span>, {
+            label: <span class="hljs-string">"Password"</span>,
+            attribs: {
+                <span class="hljs-class"><span class="hljs-keyword">class</span></span>: <span class="hljs-string">"text-field"</span>
+            },
+            validators: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">NotEmpty</span>({
+                    messages: {
+                        <span class="hljs-string">"is_empty"</span>: <span class="hljs-string">"Password is required"</span>
+                    }
+                }),
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">StringLength</span>({
+                    min: <span class="hljs-number">6</span>,
+                    messages: {
+                        too_short: <span class="hljs-string">"Password must be at least %min% characters long"</span>
+                    }
+                })
+            ]
+        }),
+        <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>.<span class="hljs-type">Element</span>.<span class="hljs-type">Password</span>(<span class="hljs-string">"password2"</span>, {
+            label: <span class="hljs-string">"Repeat password"</span>,
+            attribs: {
+                <span class="hljs-class"><span class="hljs-keyword">class</span></span>: <span class="hljs-string">"form-control"</span>
+            },
+            validators: [
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">NotEmpty</span>({
+                    messages: {
+                        <span class="hljs-string">"is_empty"</span>: <span class="hljs-string">"Repeated password is required"</span>
+                    }
+                }),
+                <span class="hljs-keyword">new</span> <span class="hljs-type">Validate</span>.<span class="hljs-type">Identical</span>({
+                    token: <span class="hljs-string">"password1"</span>,
+                    messages: {
+                        <span class="hljs-string">"not_same"</span>: <span class="hljs-string">"Passwords do not match"</span>
+                    }
+                })
+            ]
+        }),
+        <span class="hljs-keyword">new</span> <span class="hljs-type">Form</span>.<span class="hljs-type">Element</span>.<span class="hljs-type">Button</span>(<span class="hljs-string">"submit"</span>, {
+            content: <span class="hljs-string">"Sign up"</span>,
+            attribs: {
+                <span class="hljs-class"><span class="hljs-keyword">class</span></span>: <span class="hljs-string">"btn btn-red"</span>,
+                <span class="hljs-class"><span class="hljs-keyword">type</span></span>: <span class="hljs-string">"submit"</span>
+            }
+        })
+    ]);
+
+    <span class="hljs-keyword">return</span> form;
+}
+</code></pre>
+<h4 id="defining-form-layout-file-signup-form-jade-a-id-define-form-layout-a-">Defining form layout (file: <code>signup-form.jade</code>) <a id="define-form-layout"></a></h4>
+<p>Since <code>carbon-form</code> gives you freedom to style your own forms any way you wish, you can define form layout in the separate file and then tell to <code>carbon-form</code> where to look for this file. When the form renders it will use this layout as a template.</p>
+<pre><code class="lang-Jade"><span class="hljs-selector-class">.form-group</span>
+    <span class="hljs-selector-tag">div</span>
+        label(<span class="hljs-keyword">for</span>=<span class="hljs-string">"#{elements.name.getName()}"</span>)
+            != elements<span class="hljs-selector-class">.name</span><span class="hljs-selector-class">.getLabel</span>()
+    <span class="hljs-selector-tag">div</span>
+        != elements<span class="hljs-selector-class">.name</span><span class="hljs-selector-class">.render</span>()  
+<span class="hljs-selector-class">.form-group</span>
+    <span class="hljs-selector-tag">div</span>
+        label(<span class="hljs-keyword">for</span>=<span class="hljs-string">"#{elements.email_address.getName()}"</span>)
+            != elements<span class="hljs-selector-class">.email_address</span><span class="hljs-selector-class">.getLabel</span>()
+    <span class="hljs-selector-tag">div</span>
+        != elements<span class="hljs-selector-class">.email_address</span><span class="hljs-selector-class">.render</span>()  
+<span class="hljs-selector-class">.form-group</span>
+    <span class="hljs-selector-tag">div</span>
+        label(<span class="hljs-keyword">for</span>=<span class="hljs-string">"#{elements.password1.getName()}"</span>)
+            != elements<span class="hljs-selector-class">.password1</span><span class="hljs-selector-class">.getLabel</span>()
+    <span class="hljs-selector-tag">div</span>
+        != elements<span class="hljs-selector-class">.password1</span><span class="hljs-selector-class">.render</span>()  
+<span class="hljs-selector-class">.form-group</span>
+    <span class="hljs-selector-tag">div</span>
+        label(<span class="hljs-keyword">for</span>=<span class="hljs-string">"#{elements.password2.getName()}"</span>)
+            != elements<span class="hljs-selector-class">.password2</span><span class="hljs-selector-class">.getLabel</span>()
+    <span class="hljs-selector-tag">div</span>
+        != elements<span class="hljs-selector-class">.password2</span><span class="hljs-selector-class">.render</span>()  
+<span class="hljs-selector-class">.form-group</span>
+    <span class="hljs-selector-tag">div</span>
+        != elements<span class="hljs-selector-class">.submit</span><span class="hljs-selector-class">.render</span>()
+</code></pre>
+<h4 id="validation-and-rendering-using-carbon-framework-a-id-validation-and-rendering-a-">Validation and rendering (using <code>carbon-framework</code>) <a id="validation-and-rendering"></a></h4>
+<p>This example features <code>carbon-framework</code> just to make it easier for you to understand how <code>carbon-form</code> works in reality. Of course you can use <code>carbon-form</code> with any other Node.js framework or no framework at all.</p>
+<pre><code class="lang-js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> {
+        signupAction: {
+            post: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+                <span class="hljs-keyword">var</span> postData = req.body;
+
+                <span class="hljs-keyword">var</span> form = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./forms/signup-form"</span>)({
+                    viewiewScriptPaths: res.viewPaths
+                });
+
+                form.isValid(postData, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, values</span>) </span>{
+                    <span class="hljs-keyword">if</span> (err)
+                    {
+                        form.render(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
+                            <span class="hljs-comment">// Now in the view all you have to do is call `!= form.render()`</span>
+                            <span class="hljs-comment">// (if you're using Jade engine) and it will return rendered form </span>
+                            <span class="hljs-comment">// as HTML all together with all errored fields</span>
+
+                            res.render(<span class="hljs-string">"scripts/signup"</span>, {
+                                formSignup: form
+                            });
+                        });
+                    }
+                    <span class="hljs-keyword">else</span>
+                    {
+                        <span class="hljs-comment">// Form validation is successful and argument `values` now contains all </span>
+                        <span class="hljs-comment">// field values which are filtered and validated and therefor safe </span>
+                        <span class="hljs-comment">// to be inserted into the database</span>
+
+                        res.redirect(<span class="hljs-string">"/signup-success"</span>);
+                    }
+                });
+
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="elements-a-id-elements-a-">Elements <a id="elements"></a></h2>
+<p>The <code>carbon-form</code> currently supports 6 HTML form elements (<code>Button</code>, <code>Checkbox</code>, <code>Hidden</code>, <code>Password</code>, <code>Text</code>, <code>Textarea</code>) and 4 extended elements (<code>EmailAddress</code>, <code>Link</code>, <code>Recaptcha</code>, <code>Switch</code>).</p>
+<h2 id="subforms-a-id-subforms-a-">Subforms <a id="subforms"></a></h2>
+<p>Depending on how you organize your forms you can nest one or more forms within a single form.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> <span class="hljs-keyword">Form</span> = require(<span class="hljs-string">"carbon-form"</span>);
+
+<span class="hljs-keyword">var</span> <span class="hljs-keyword">form</span> = new <span class="hljs-keyword">Form</span>();
+<span class="hljs-keyword">var</span> buttons = new <span class="hljs-keyword">Form</span>();
+
+parentForm.addSubForm(<span class="hljs-string">"buttons"</span>, buttons);
+</code></pre>
+<h2 id="who-is-using-it-a-id-who-is-using-it-a-">Who is using it <a id="who-is-using-it"></a></h2>
+<p>The <code>carbon-form</code> is one of many that is running behind our web application: <a href="https://www.timelinity.com">Timelinity</a></p>
+<h2 id="contributing-a-id-contributing-a-">Contributing <a id="contributing"></a></h2>
+<p>If you&#39;re willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - <a href="https://github.com/choxnox">Amir Ahmetovic</a></p>
+</div></div></div></body></html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html><html><head><title>CarbonJS Validators - Zend-like validators in Node.js</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="../assets/3rd-party/bootstrap/css/bootstrap.min.css" rel="stylesheet"><script src="../assets/3rd-party/jquery/js/jquery-2.1.4.min.js">   </script><script src="../assets/3rd-party/bootstrap/js/bootstrap.min.js"></script><script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script><style type="text/css">h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+#header {
+  background-color: #111;
+  margin-bottom: 50px;
+  padding: 20px;
+}
+      
+#header iframe {
+  position: absolute;
+  right: -165px;
+  top: 10px;
+}
+      
+#header ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+#header ul li {
+  display: inline-block;
+}
+
+#header ul li a {
+  color: #fff;
+  display: block;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+      
+.nav .nav {
+  padding-left: 20px;
+}
+
+.nav li a {
+  padding: 5px 10px;
+}
+
+pre {
+  margin-bottom: 15px;
+}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-validate on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-validate#stargazers_count" data-count-href="/carbonjs/carbon-validate/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-validate" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#stand-alone">Stand-alone</a></li><li><a href="#with-carbon-form">With carbon-form</a></li></ul></li><li><a href="#validators">Validators</a><ul class="nav"><li><a href="#between-validator">Between validator</a></li><li><a href="#callback-validator">Callback validator</a></li><li><a href="#dbnorecordexists-validator">DbNoRecordExists validator</a></li><li><a href="#dbrecordexists-validator">DbRecordExists validator</a></li><li><a href="#emailaddress-validator">EmailAddress validator</a></li><li><a href="#identical-validator">Identical validator</a></li><li><a href="#notempty-validator">Notempty validator</a></li><li><a href="#stringlength-validator">StringLength validator</a></li><li><a href="#url-validator">Url validator</a></li></ul></li><li><a href="#who-is-using-it">Who is using it</a></li><li><a href="#contributing">Contributing</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-validators-carbon-validate-a-id-intro-a-">CarbonJS Validators / <code>carbon-validate</code> <a id="intro"></a></h1>
+<p>The <code>carbon-validate</code> module provides Zend-like set of commonly used data validators. This means you can check your data with  a set of validators after you&#39;ve received user&#39;s input or before you insert data into your database. You can use it as a stand-alone module or most commonly with <code>carbon-form</code> module which validates form data automatically for you.</p>
+<p>If you&#39;ve ever worked with any <code>Zend_Validate</code> validator from the Zend Framework you will be familiar with it&#39;s sintax and if you haven&#39;t then scroll down to the &quot;Usage&quot; section and you&#39;ll be up-and-running in no time.</p>
+<h2 id="installation-a-id-installation-a-">Installation <a id="installation"></a></h2>
+<pre><code>npm <span class="hljs-keyword">install</span> carbon-<span class="hljs-keyword">validate</span> [<span class="hljs-comment">--save]</span>
+</code></pre><h2 id="usage-a-id-usage-a-">Usage <a id="usage"></a></h2>
+<p>The <code>carbon-validate</code> module packs some of the most used validators which share the same interface. Each validator provides public access to the function <code>isValid</code> which does the actual validation check and then calls the callback function letting you know whether input data was successfully validated or not. Some validators have options so that you can customize it to your needs.</p>
+<p>The function <code>isValid</code> has the following prototype <code>Validate.prototype.isValid = function(value, context, callback)</code> and it is common to all validators. It has 3 parameters:</p>
+<ul>
+<li><code>value</code> - Input value that is being passed for the validation.</li>
+<li><code>context</code> - Context in which input value exists (used by <code>carbon-form</code> when needed).</li>
+<li><code>callback</code> - The callback function which is called after the validation check has been completed.</li>
+</ul>
+<h4 id="stand-alone-a-id-stand-alone-a-">Stand-alone <a id="stand-alone"></a></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> Validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"carbon-validate"</span>);
+
+<span class="hljs-keyword">var</span> between = <span class="hljs-keyword">new</span> Validate.Between({
+    min: <span class="hljs-number">5</span>,
+    max: <span class="hljs-number">25</span>
+});
+
+<span class="hljs-keyword">var</span> inputValue = <span class="hljs-string">"..."</span>;
+
+between.isValid(inputValue, {}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, value</span>) </span>{
+    <span class="hljs-keyword">if</span> (err)
+        <span class="hljs-built_in">console</span>.log(err); <span class="hljs-comment">// By default it outputs: "'...' is not between '5' and '25'"</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Input value is between 5 and 25"</span>);
+});
+</code></pre>
+<h4 id="with-carbon-form-a-id-with-carbon-form-a-">With <code>carbon-form</code> <a id="with-carbon-form"></a></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> Form = <span class="hljs-built_in">require</span>(<span class="hljs-string">"carbon-form"</span>);
+<span class="hljs-keyword">var</span> Validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"carbon-validate"</span>);
+
+<span class="hljs-keyword">var</span> form = <span class="hljs-keyword">new</span> Form();
+
+form.addElements([
+    <span class="hljs-keyword">new</span> Form.Element.Text(<span class="hljs-string">"email_address"</span>, {
+        label: <span class="hljs-string">"Email address"</span>,
+        validators: [
+            <span class="hljs-keyword">new</span> Validate.NotEmpty({
+                messages: {
+                    <span class="hljs-string">"is_empty"</span>: <span class="hljs-string">"Please type in your email address"</span> 
+                }
+            }),
+            <span class="hljs-keyword">new</span> Validate.EmailAddress()
+        ]
+    });
+]);
+</code></pre>
+<p>This way when the form is rendered to the user it will automatically display error messages for each element whose validators haven&#39;t passed the validation check.</p>
+<h2 id="validators-a-id-validators-a-">Validators <a id="validators"></a></h2>
+<h4 id="between-a-id-between-validator-a-">Between <a id="between-validator"></a></h4>
+<p>Checks if the input value is between two integer values.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>inclusive</code> [<code>Boolean</code>] - Defines whether <code>min</code> and <code>max</code> values represent minimal and maximal values allowed, respectively.</li>
+<li><code>min</code> [<code>Integer</code>] - Minimum value.</li>
+<li><code>max</code> [<code>Integer</code>] - Maximum value.</li>
+<li><code>messages</code><ul>
+<li><code>not_between</code> - Message which is returned if the input value isn&#39;t between <code>min</code> and <code>max</code> values.</li>
+</ul>
+</li>
+</ul>
+<h4 id="callback-a-id-callback-validator-a-">Callback <a id="callback-validator"></a></h4>
+<p>If you don&#39;t want to make your own validator but you still need to do some custom validation check then this validator is for you.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>callback</code> [<code>Function</code>] - A function that receives two arguments: the value and validator options and which returns either <code>true</code> or <code>false</code> depending whether you&#39;ve successfully validated input data.</li>
+</ul>
+<h4 id="dbnorecordexists-a-id-nodbrecordexists-validator-a-">DbNoRecordExists <a id="nodbrecordexists-validator"></a></h4>
+<p>Checks if the value already exists in the database. This means that the validation check will fail if there is already a matching record in the database. Typical example is when you want to check if username is already taken or if email address is already registered in the database.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>adapter</code> [<code>String</code>] - Name of the database adapter to be used (currently only <code>mongoose</code> is supported).</li>
+<li><code>collection</code> [<code>String</code>] - Name of the collection/table in the database which possibly contains the value.</li>
+<li><code>field</code> [<code>String</code>] - Name of the field/column in the collection/table which possibly contains the value.</li>
+<li><code>messages</code><ul>
+<li><code>record_found</code> - Messages which is returned if the input value already exists in the database.</li>
+</ul>
+</li>
+</ul>
+<h4 id="dbrecordexists-a-id-dbrecordexists-validator-a-">DbRecordExists <a id="dbrecordexists-validator"></a></h4>
+<p>Verifies that the value is in the database. This means that the validation check will fail if there is no matching record in the database. Typical example is when you want to check if product&#39;s category exists at all before you insert product in the database.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>adapter</code> [<code>String</code>] - Name of the database adapter to be used (currently only <code>mongoose</code> is supported).</li>
+<li><code>collection</code> [<code>String</code>] - Name of the collection/table in the database which possibly contains the value.</li>
+<li><code>field</code> [<code>String</code>] - Name of the field/column in the collection/table which possibly contains the value.</li>
+<li><code>messages</code><ul>
+<li><code>record_not_found</code> - Messages which is returned if the input value is not found in the database.</li>
+</ul>
+</li>
+</ul>
+<h4 id="emailaddress-a-id-emailaddress-validator-a-">EmailAddress <a id="emailaddress-validator"></a></h4>
+<p>Checks if the value is valid email address.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>messages</code><ul>
+<li><code>invalid_value</code> - Messages which is returned if the input value is not valid email address.</li>
+</ul>
+</li>
+</ul>
+<h4 id="identical-a-id-identical-validator-a-">Identical <a id="identical-validator"></a></h4>
+<p>Checks if the value equals some other form element in the same form. Typical example is when you need to verify fields such as &quot;new password&quot; and &quot;repeat new password&quot; contain the same value.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>token</code> [<code>String</code>] - Name of the other element in the form.</li>
+<li><code>messages</code><ul>
+<li><code>not_same</code> - Messages which is returned if the input value is not the same as the input value from the token element.</li>
+</ul>
+</li>
+</ul>
+<h4 id="notempty-a-id-notempty-validator-a-">NotEmpty <a id="notempty-validator"></a></h4>
+<p>Checks if the value is not empty. This validator can be used in cases where you have required elements in the form.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>messages</code><ul>
+<li><code>is_empty</code> - Messages which is returned if the input value is empty.</li>
+</ul>
+</li>
+</ul>
+<h4 id="stringlength-a-id-stringlength-validator-a-">StringLength <a id="stringlength-validator"></a></h4>
+<p>Checks if the length of the string value fits <code>min</code> and/or <code>max</code> criteria defined in the validator options.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>min</code> [<code>Integer</code>] - Minimum string length.</li>
+<li><code>max</code> [<code>Integer</code>] - Maximum string length.</li>
+<li><code>messages</code><ul>
+<li><code>too_short</code> - Messages which is returned if the input value is shorter than the <code>min</code> value.</li>
+<li><code>too_long</code> - Messages which is returned if the input value is longer than the <code>max</code> value.</li>
+</ul>
+</li>
+</ul>
+<h4 id="url-a-id-url-validator-a-">Url <a id="url-validator"></a></h4>
+<p>Checks if the value is valid URL.</p>
+<p><strong>Options</strong></p>
+<ul>
+<li><code>messages</code><ul>
+<li><code>invalid_url</code> - Messages which is returned if the input value is not valid URL.</li>
+</ul>
+</li>
+</ul>
+<h2 id="who-is-using-it-a-id-who-is-using-it-a-">Who is using it <a id="who-is-using-it"></a></h2>
+<p>The <code>carbon-validate</code> module is one of many that is running behind our web application: <a href="https://www.timelinity.com">Timelinity</a></p>
+<h2 id="contributing-a-id-contributing-a-">Contributing <a id="contributing"></a></h2>
+<p>If you&#39;re willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - <a href="https://github.com/choxnox">Amir Ahmetovic</a></p>
+</div></div></div></body></html>

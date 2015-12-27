@@ -1,0 +1,76 @@
+doctype html
+html
+  head
+    title CarbonJS - Everything you need to build awesome web applications
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(href="assets/3rd-party/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+    script(src="assets/3rd-party/jquery/js/jquery-2.1.4.min.js")    
+    script(src="assets/3rd-party/bootstrap/js/bootstrap.min.js")
+    style(type="text/css").
+      h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 16px;
+        margin-top: 24px;
+      }
+      
+      .nav .nav {
+        padding-left: 20px;
+      }
+      
+      .nav li a {
+        padding: 5px 10px;
+      }
+      
+      pre {
+        margin-bottom: 15px;
+      }
+  body
+    .container
+      .row
+        .col-md-3
+          h1 &nbsp;
+          nav.affix-top
+            ul.nav
+              li
+                a(href="#intro") Introduction
+              li
+                a(href="#getting-started") Getting started
+                ul.nav
+                  li
+                    a(href="#installation") Installation
+                  li
+                    a(href="#project-structure") Project structure
+                  li
+                    a(href="#bootstrapping") Bootstrapping
+                  li
+                    a(href="#configuration") Configuration
+                  li
+                    a(href="#custom-init") Custom initialization
+                  li
+                    a(href="#hooks") Hooks
+                  li
+                    a(href="#controllers") Controllers
+                  li
+                    a(href="#routing") Routing
+                  li
+                    a(href="#helpers") Helpers
+                    ul.nav
+                      li
+                        a(href="#headlink-helper") HeadLink helper
+                      li
+                        a(href="#headmeta-helper") HeadMeta helper
+                      li
+                        a(href="#headscript-helper") HeadScript helper
+                      li
+                        a(href="#headtitle-helper") HeadTitle helper
+                      li
+                        a(href="#navigation-helper") Navigation helper
+                      li
+                        a(href="#url-helper") Url helper
+                li
+                  a(href="#who-is-using-it") Who is using it
+                li
+                  a(href="#contributing") Contributing
+        .col-md-9
+          !{body}
