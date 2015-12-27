@@ -1,0 +1,1 @@
+markx --template index.jade index.md > index.html

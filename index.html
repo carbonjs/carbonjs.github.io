@@ -1,1 +1,456 @@
-test :D
+<!DOCTYPE html><html><head><link href="/assets/bootstrap/css/bootstrap.min.css"><script src="/assets/bootstrap/js/bootstrap.min.js"></script><script src="/assets/jquery/js/jquery-2.1.4.min.js">   </script></head><body><h1 id="carbonjs-framework-carbon-framework-">CarbonJS Framework / <code>carbon-framework</code></h1>
+<p>CarbonJS is a modular MVC framework for NodeJS based on Zend Framework which uses ExpressJS in the background. It truly is modular framework which means each module can have it&#39;s own controllers, views, layouts, routes, navigation, forms, models, configuration and more. Each module can function as a separate entity or as a part of a larger system. The best of all is that modules are plug-and-play so you can easily copy modules that you already have in one project to another project without any configuration whatsoever.</p>
+<p>Imagine you have an <code>auth</code> module in one project and within that module you have modules <code>local</code> (login/signup via username/email address and password), <code>facebook</code> (connect to your auth system through Facebook) and <code>twitter</code> (connect to your auth system through Twitter). Now imagine that each of these modules are already fully functional. When in your next project you want to have an authorization system all you have to do is simply copy module from your previous project. You don&#39;t want Twitter authorization? No problem, simply remove <code>twitter</code> module from your new project.</p>
+<p>Running a website with CarbonJS is even easier: just set some basic parameters such as hostname and port, domains used etd. and you&#39;re ready to rock.</p>
+<h2 id="getting-started">Getting started</h2>
+<h3 id="installation">Installation</h3>
+<pre><code>npm <span class="hljs-keyword">install</span> carbon-framework [<span class="hljs-comment">--save]</span>
+</code></pre><h3 id="project-structure">Project structure</h3>
+<p>Even though CarbonJS is a use-as-you-wish framework it requires that you follow some very basic rules when it comes to structuring your project. This is bare minimum that is required to run your project:</p>
+<pre><code>Project root
+├─ <span class="hljs-keyword">library</span>
+   └─ helpers
+├─ modules
+├─ <span class="hljs-keyword">public</span>
+└─ views
+   ├─ helpers
+   ├─ layouts
+   └─ scripts
+</code></pre><ul>
+<li><code>library</code> - Keep all your code related to your application organized under one directory.</li>
+<li><code>library/helpers</code> - Contains application-level helpers which will be available through your application. For example, here you can put parts of code that will be reused all the time such as a helper to render header or footer of your application.</li>
+<li><code>public</code> - Contains all files which need to be accessible from the client side (e.g. images, CSS &amp; JS files etc.)</li>
+<li><code>views/helper</code> - Contains view templates of your helpers (if needed).</li>
+<li><code>views/layout</code> - Contains view layouts for your application.</li>
+<li><code>views/scripts</code> - Contains view templates of the application-level pages such as 404 or 500 errors.</li>
+<li><code>modules</code> - This is a special root directory for all of your modules.</li>
+</ul>
+<p>One of the best things regarding CarbonJS is you can nest as much modules as you need. Take a look at the following sample project structure:</p>
+<pre><code>Project root
+└─ modules
+   ├─ admin
+   │  └─ modules
+   │     ├─ category
+   │     │  ├─ <span class="hljs-built_in">config</span>
+   │     │  ├─ controllers
+   │     │  ├─ forms
+   │     │  └─ views
+   │     ├─ products
+   │     │  ├─ <span class="hljs-built_in">config</span>
+   │     │  ├─ controllers
+   │     │  ├─ forms
+   │     │  └─ views
+   │     └─ users
+   │        ├─ <span class="hljs-built_in">config</span>
+   │        ├─ controllers
+   │        ├─ forms
+   │        └─ views
+   ├─ auth
+   │  └─ modules
+   │     ├─ facebook
+   │     │  ├─ <span class="hljs-built_in">config</span>
+   │     │  └─ controllers
+   │     ├─ local
+   │     │  ├─ <span class="hljs-built_in">config</span>
+   │     │  ├─ controllers
+   │     │  ├─ forms
+   │     │  └─ views
+   │     └─ twitter
+   │        ├─ <span class="hljs-built_in">config</span>
+   │        └─ controllers
+   └─ default
+      ├─ <span class="hljs-built_in">config</span>
+      ├─ controllers
+      ├─ forms
+      └─ views
+</code></pre><p>As already said each module can have its own set of modules, configs, forms etc. This allows you to create truly modular web applications and makes reusing modules in another project easier than ever.</p>
+<h3 id="bootstraping">Bootstraping</h3>
+<p>In your main application file include <code>carbon-framework</code>, set some startup options and execute <code>run</code> function which is the single entry point to the framework and which takes over all the hard work for you.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.run({
+    baseDomain: <span class="hljs-string">"http://localhost:1234"</span>,
+    server: {
+        port: <span class="hljs-number">1234</span>
+    }
+}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Server is now running on port "</span> + app.server.address().port + <span class="hljs-string">"."</span>);
+});
+
+<span class="hljs-built_in">module</span>.exports = exports = app;
+</code></pre>
+<h3 id="configuration">Configuration</h3>
+<p>There are few options you can configure before your execute your application and which you set by pass them to the <code>run</code> function. These options include</p>
+<ul>
+<li><code>baseDomain</code> [<code>String</code>] - Base domain for your application which is used by the router to generate full URLs to your resources.</li>
+<li><code>express</code> [<code>Object</code>] - Since CarbonJS is based on ExpressJS you can manually pass options to the ExpressJS framework.</li>
+<li><code>overrides</code><ul>
+<li><code>absoluteRequire</code> [<code>Boolean</code>] - Overrides the <code>require</code> function which is used to load modules in such way that you can load Node.js modules from any CarbonJS module regardless of the depth the CarbonJS module (for example it allows you to simply load Node.js module <code>var Users = require(&quot;/models/db/users&quot;)</code>).</li>
+</ul>
+</li>
+<li><code>paths</code><ul>
+<li><code>base</code> [<code>String</code>] - Base path to your application; usually you don&#39;t need touch this.</li>
+<li><code>library</code> [<code>String</code>] - Path to the library directory (defaults to <code>library</code>)</li>
+</ul>
+</li>
+<li><code>server</code><ul>
+<li><code>hostname</code> [<code>String</code>] - Defaults to <code>localhost</code></li>
+<li><code>port</code> [<code>Integer</code>] - Defaults to <code>80</code></li>
+</ul>
+</li>
+<li><code>session</code> [<code>Object</code>] - CarbonJS uses <code>express-session</code> for session handling and here you can pass options to it.</li>
+</ul>
+<h3 id="custom-initialization">Custom initialization</h3>
+<p>CarbonJS gives you ability to run any code during the bootstraping of your application which is executed only once during this process. Here you can put things like setting up database connection or ACL or anything else. You can define functions through <code>inits</code> object provided by CarbonJS.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-keyword">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.inits = {
+    initDatabase: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// code to init database goes here</span>
+    },
+    setSomethingForEachRequest: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span> </span>{ <span class="hljs-comment">// CarbonJS extends ExpressJS's `use` function</span>
+            <span class="hljs-comment">// code to do something goes here</span>
+
+            next();
+        });
+    }
+};
+
+app.run();
+</code></pre>
+<h3 id="hooks">Hooks</h3>
+<p>Hooks are special events that occur during the lifetime of your application and they give you a way to execute custom code when they happen. Currently there are 2 types of hooks in CarbonJS: <code>errors</code> and <code>preAction</code>.</p>
+<p>The <code>errors</code> hook occur when there is an error in your application and currently it recognizes 2 errors: <code>notFound</code> (error 404 when route can&#39;t be found) and <code>serverError</code> (error 500 when there is a problem with your application). This allows you to handle errors gracefully like displaying custom templates or sending an email to the administrator of your application.</p>
+<p>The <code>preAction</code> hook allows you to specify one or more functions which will be executed before each action. For example here you can put the logic which checks whether current user is allowed to access currently routed action or not.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.hooks = {
+    errors: {
+        notFound: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>{
+            <span class="hljs-comment">// handle 404 error</span>
+        },
+        serverError: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>) </span>{
+            <span class="hljs-comment">// handle 500 error</span>
+        }
+    },
+    preAction: {
+        checkAcl: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>{
+            <span class="hljs-comment">// Access control logic goes here</span>
+        }
+    }
+};
+
+app.run();
+</code></pre>
+<h3 id="controllers">Controllers</h3>
+<p>Controllers in CarbonJS have easy-to-follow structure which helps you organize application logic. They&#39;re nothing more than Node.js modules with specific structure as below:</p>
+<pre><code class="lang-js">module.exports = function() {
+    <span class="hljs-keyword">return</span> {
+        indexAction: {
+            init: function(req, res) {
+                // this code gets execute regardless <span class="hljs-keyword">of</span> the <span class="hljs-keyword">method</span> <span class="hljs-keyword">and</span> it's optional (you don't need to use it
+                // <span class="hljs-keyword">if</span> it's <span class="hljs-keyword">not</span> necessary)
+                // this <span class="hljs-keyword">is</span> good place to define page title <span class="hljs-keyword">or</span> some other code <span class="hljs-keyword">not</span> bound to specific <span class="hljs-keyword">method</span>
+            },
+            delete: function(req, res) {
+                // code <span class="hljs-keyword">for</span> <span class="hljs-type">DELETE</span> <span class="hljs-type">HTTP</span> <span class="hljs-keyword">method</span> goes; it's optional
+            },
+            get: function(req, res) {
+                // code <span class="hljs-keyword">for</span> <span class="hljs-type">GET</span> <span class="hljs-type">HTTP</span> <span class="hljs-keyword">method</span> goes; it's optional
+            },
+            post: function(req, res) {
+                // code <span class="hljs-keyword">for</span> <span class="hljs-type">POST</span> <span class="hljs-type">HTTP</span> <span class="hljs-keyword">method</span> goes; it's optional
+            },
+            put: function(req, res) {
+                // code <span class="hljs-keyword">for</span> <span class="hljs-type">PUT</span> <span class="hljs-type">HTTP</span> <span class="hljs-keyword">method</span> goes; it's optional
+            }
+        }
+    }
+}
+</code></pre>
+<p>Controller in CarbonJS needs to return an object which is nothing more than a list of actions defined for that controller. Under each action you need to define one or more HTTP method which will be executed by your application. There is a special <code>init</code> case which is not an HTTP method but it will be executed before any HTTP method.</p>
+<p>To render specific view script all you have to do is:</p>
+<pre><code class="lang-js">    ...
+    <span class="hljs-selector-tag">indexAction</span>: {
+        <span class="hljs-attribute">get</span>: <span class="hljs-built_in">function</span>(req, res) {
+            res.<span class="hljs-built_in">render</span>(<span class="hljs-string">"scripts/index"</span>, {
+                some: <span class="hljs-string">"data"</span>
+            });
+        }
+    }
+    ...
+</code></pre>
+<h3 id="routing">Routing</h3>
+<p>CarbonJS has it&#39;s own router which does the job of matching specific routes to the appropriate controller-action. Usually you don&#39;t need to access the router directly but you can:</p>
+<pre><code class="lang-js"><span class="hljs-variable"><span class="hljs-keyword">var</span> app</span> = require(<span class="hljs-string">"carbon-framework"</span>);
+<span class="hljs-variable"><span class="hljs-keyword">var</span> router</span> = app.Router;
+</code></pre>
+<p>To make the CarbonJS framework do as much work for you as possible, routes can be defined in a configuration file from where they&#39;ll be passed to the router. File name must be <code>routes.js</code> and it must reside inside <code>config</code> folder either in the root directory of your project or inside CarbonJS modules. The structure for this file is:</p>
+<pre><code class="lang-js">module.exports = {
+    <span class="hljs-string">"auth-login"</span>: {
+        route: <span class="hljs-string">"/login"</span>,
+        module: <span class="hljs-string">"auth:local"</span>,
+        controller: <span class="hljs-string">"login"</span>,
+        action: <span class="hljs-string">"login"</span>,
+        sitemap: {
+            priority: <span class="hljs-number">0</span>.<span class="hljs-number">9</span>,
+            frequency: <span class="hljs-string">"daily"</span>
+        }
+    },
+    <span class="hljs-string">"auth-logout"</span>: {
+        route: <span class="hljs-string">"/logout"</span>,
+        module: <span class="hljs-string">"auth:local"</span>,
+        controller: <span class="hljs-string">"login"</span>,
+        action: <span class="hljs-string">"logout"</span>
+    }
+}
+</code></pre>
+<p>As you can see we&#39;ve defined two routes:</p>
+<ul>
+<li><code>auth-login</code> which responds to the <code>/login</code> URL and which executes <code>login</code> action from the <code>login</code> controller found under modules <code>auth/login</code>.</li>
+<li><code>auth-logout</code> which responds to the <code>/logout</code> URL and which executes <code>logout</code> action from the <code>login</code> controller found under modules <code>auth/login</code>.</li>
+</ul>
+<h3 id="helpers">Helpers</h3>
+<p>CarbonJS comes with few handy helpers which help you get started fast but you can also write your own. Helpers are accessible in both controllers and views. What they do is help you organize parts of code which you&#39;d repeat over and over again or parts of code for which you&#39;d like to separate certain logic.</p>
+<h4 id="headlink-helper">HeadLink helper</h4>
+<p>The <code>HeadLink</code> helper is used when you want to add <code>link</code> HTML element to your view layouts or scripts. Usually during the bootstraping of your application you&#39;ll define appropriate CSS stylesheet files that will style your application or maybe add a favicon.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-keyword">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.inits = {
+    initMyStylesheets: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span> </span>{
+            res
+                .helper(<span class="hljs-string">"headLink"</span>)
+                .setShortcutIcon(<span class="hljs-string">"/favicon.png"</span>)
+                .appendStylesheet(<span class="hljs-string">"/assets/css/style.css"</span>)
+                .appendStylesheet(<span class="hljs-string">"//www.external.com/styles/style1.css"</span>)
+            ;
+        });
+    }
+}
+</code></pre>
+<p>You can also modify <code>HeadLink</code> from within controllers which will make changes to the view only for that action:</p>
+<pre><code class="lang-js">    ...
+    indexAction: {
+        init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> </span>{
+            res.helper(<span class="hljs-string">"headLink"</span>).appendStylesheet(<span class="hljs-string">"/assets/css/index.css"</span>);
+        },
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> </span>{
+            res.helper(<span class="hljs-string">"headLink"</span>).appendStylesheet(<span class="hljs-string">"/assets/css/index-get.css"</span>);
+
+            res.render(<span class="hljs-string">"scripts/index"</span>, {
+                some: <span class="hljs-string">"data"</span>
+            });
+        }
+    }
+    ...
+</code></pre>
+<p>To output <code>HeadLink</code> to your view layouts and/or scripts all you have to do is call <code>HeadLink</code> helper from the view template:</p>
+<pre><code class="lang-Jade">doctype <span class="hljs-selector-tag">html</span>
+    <span class="hljs-selector-tag">html</span>
+        head
+            != helper(<span class="hljs-string">"headLink"</span>)
+        <span class="hljs-selector-tag">body</span>
+            ...
+</code></pre>
+<h4 id="headmeta-helper">HeadMeta helper</h4>
+<p>The <code>HeadMeta</code> helper is used when you want to add <code>meta</code> HTML element to your view layouts or scripts.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-keyword">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.inits = {
+    initMyMeta: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span> </span>{
+            res
+                .helper(<span class="hljs-string">"headMeta"</span>)
+                .appendMeta({
+                    charset: <span class="hljs-string">"utf-8"</span>
+                })
+                .appendMeta({
+                    <span class="hljs-string">"http-equiv"</span>: <span class="hljs-string">"X-UA-Compatible"</span>,
+                    content: <span class="hljs-string">"IE=edge"</span>
+                })
+                .appendMeta(<span class="hljs-string">"viewport"</span>, <span class="hljs-string">"width=device-width, initial-scale=1"</span>)
+            ;
+        });
+    }
+}
+</code></pre>
+<p>You can also modify <code>HeadMeta</code> from within controllers which will make changes to the view only for that action:</p>
+<pre><code class="lang-js">    ...
+    <span class="hljs-selector-tag">indexAction</span>: {
+        <span class="hljs-selector-tag">init</span>: <span class="hljs-selector-tag">function</span>(req, res) {
+            <span class="hljs-selector-tag">res</span><span class="hljs-selector-class">.helper</span>(<span class="hljs-string">"headMeta"</span>)<span class="hljs-selector-class">.appendMeta</span>({ <span class="hljs-attribute">property</span>: <span class="hljs-string">"og:title"</span>, <span class="hljs-attribute">content</span>: <span class="hljs-string">"My page title"</span> });
+        },
+        <span class="hljs-selector-tag">get</span>: <span class="hljs-selector-tag">function</span>(req, res) {
+            <span class="hljs-selector-tag">res</span><span class="hljs-selector-class">.helper</span>(<span class="hljs-string">"headMeta"</span>)<span class="hljs-selector-class">.appendMeta</span>({ <span class="hljs-attribute">property</span>: <span class="hljs-string">"og:description"</span>, <span class="hljs-attribute">content</span>: <span class="hljs-string">"My description"</span> });
+
+            <span class="hljs-selector-tag">res</span><span class="hljs-selector-class">.render</span>(<span class="hljs-string">"scripts/index"</span>, {
+                <span class="hljs-attribute">some</span>: <span class="hljs-string">"data"</span>
+            });
+        }
+    }
+    ...
+</code></pre>
+<p>To output <code>HeadMeta</code> to your view layouts and/or scripts all you have to do is call <code>HeadMeta</code> helper from the view template:</p>
+<pre><code class="lang-Jade">doctype <span class="hljs-selector-tag">html</span>
+    <span class="hljs-selector-tag">html</span>
+        head
+            != helper(<span class="hljs-string">"headMeta"</span>)
+        <span class="hljs-selector-tag">body</span>
+            ...
+</code></pre>
+<h4 id="headscript-helper">HeadScript helper</h4>
+<p>The <code>HeadScript</code> helper is used when you want to add <code>script</code> HTML element to your view layouts or scripts.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-keyword">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.inits = {
+    initMyScripts: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span> </span>{
+            res
+                .helper(<span class="hljs-string">"headScript"</span>)
+                .appendScript(<span class="hljs-string">"/assets/js/script.js"</span>)
+                .appendScript(<span class="hljs-string">"//www.external.com/scripts/script.js"</span>)
+            ;
+        });
+    }
+}
+</code></pre>
+<p>You can also modify <code>HeadScript</code> from within controllers which will make changes to the view only for that action:</p>
+<pre><code class="lang-js">    ...
+    indexAction: {
+        init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> </span>{
+            res.helper(<span class="hljs-string">"headScript"</span>).appendScript(<span class="hljs-string">"/assets/js/index.js"</span>);
+        },
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> </span>{
+            res.helper(<span class="hljs-string">"headScript"</span>).appendScript(<span class="hljs-string">"/assets/js/index-get.js"</span>);
+
+            res.render(<span class="hljs-string">"scripts/index"</span>, {
+                some: <span class="hljs-string">"data"</span>
+            });
+        }
+    }
+    ...
+</code></pre>
+<p>To output <code>HeadScript</code> to your view layouts and/or scripts all you have to do is call <code>HeadScript</code> helper from the view template:</p>
+<pre><code class="lang-Jade">doctype <span class="hljs-selector-tag">html</span>
+    <span class="hljs-selector-tag">html</span>
+        head
+            != helper(<span class="hljs-string">"headScript"</span>)
+        <span class="hljs-selector-tag">body</span>
+            ...
+</code></pre>
+<h4 id="headtitle-helper">HeadTitle helper</h4>
+<p>The <code>HeadTitle</code> helper is used when you want to add <code>title</code> HTML element to your view layouts or scripts.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> app = <span class="hljs-keyword">require</span>(<span class="hljs-string">"carbon-framework"</span>);
+
+app.inits = {
+    initMyTitle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span> </span>{
+            res
+                .helper(<span class="hljs-string">"headTitle"</span>)
+                .setPrefix(<span class="hljs-string">"Look"</span>)
+                .setSuffix(<span class="hljs-string">"My Awesome Website"</span>)
+                .setSeparator(<span class="hljs-string">"-"</span>)
+            ;
+        });
+    }
+}
+</code></pre>
+<p>You can also modify <code>HeadTitle</code> from within controllers which will make changes to the view only for that action:</p>
+<pre><code class="lang-js">    ...
+    <span class="hljs-selector-tag">indexAction</span>: {
+        <span class="hljs-attribute">init</span>: <span class="hljs-built_in">function</span>(req, res) {
+            res.<span class="hljs-built_in">helper</span>(<span class="hljs-string">"headTitle"</span>).<span class="hljs-built_in">setTitle</span>(<span class="hljs-string">"My page title"</span>);
+        }
+    }
+    ...
+</code></pre>
+<p>To output <code>HeadTitle</code> to your view layouts and/or scripts all you have to do is call <code>HeadTitle</code> helper from the view template:</p>
+<pre><code class="lang-Jade">doctype <span class="hljs-selector-tag">html</span>
+    <span class="hljs-selector-tag">html</span>
+        head
+            != helper(<span class="hljs-string">"headTitle"</span>)
+        <span class="hljs-selector-tag">body</span>
+            ...
+</code></pre>
+<h4 id="navigation-helper">Navigation helper</h4>
+<p>The <code>Navigation</code> helper is there to help you make client-side navigation which you can reuse over and over again without having to manually write HTML to all script where you need it. To make it work you must put all module-relevant navigation inside <code>navigation.js</code> which needs to be placed in the module&#39;s <code>config</code> directory. The structure for this file is:</p>
+<pre><code class="lang-js">    module.exports = {
+        <span class="hljs-string">"my navigation"</span>: {
+            <span class="hljs-class"><span class="hljs-keyword">class</span>: <span class="hljs-type">"navbar"</span>,
+            <span class="hljs-type">children: [</span></span>
+                {
+                    label: <span class="hljs-string">"Categories"</span>,
+                    uri: <span class="hljs-string">"#"</span>,
+                    children: [
+                        {
+                            label: <span class="hljs-string">"Category 1"</span>,
+                            uri: <span class="hljs-string">"/categories/1"</span>,
+                        },
+                        {
+                            label: <span class="hljs-string">"Category 2"</span>,
+                            uri: <span class="hljs-string">"/categories/2"</span>,
+                        }
+                    ]
+                },
+                {
+                    label: <span class="hljs-string">"Login"</span>,
+                    <span class="hljs-class"><span class="hljs-keyword">class</span>: <span class="hljs-type">"login-class"</span>,
+                    <span class="hljs-type">route: "auth-login"</span>,
+                <span class="hljs-type">}</span></span>
+            ]
+        }
+    }
+</code></pre>
+<p>As you can see this file consists of an object which we&#39;ll reference inside the view by its name <code>my navigation</code>. Then we define all menu item under this menu. You can either use <code>uri</code> to directly specify URL or <code>route</code> which specifies route name that is added to the <code>Router</code> previously.</p>
+<p>To output this navigation to your view layouts and/or scripts all you have to do is call <code>Navigation</code> helper from the view template:</p>
+<pre><code class="lang-Jade">doctype <span class="hljs-selector-tag">html</span>
+    <span class="hljs-selector-tag">html</span>
+        head
+            != helper(<span class="hljs-string">"navigation"</span>, <span class="hljs-string">"my navigation"</span>)
+        <span class="hljs-selector-tag">body</span>
+            ...
+</code></pre>
+<p>This will generate the following HTML output:</p>
+<pre><code class="lang-HTML"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"navbar"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"#"</span>&gt;</span>Categories<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/categories/1"</span>&gt;</span>Category 1<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/categories/2"</span>&gt;</span>Category 2<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"login-class"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/login"</span>&gt;</span>Login<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+</code></pre>
+<h4 id="url-helper">Url helper</h4>
+<p>The <code>Url</code> helper is used when you want to generate a working URL from the route added to the <code>Router</code>. It can be called either through <code>response</code> or directly from the CarbonJS. It&#39;s a special helper which is a collecton of functions to help you handle routes. The main function is <code>getUrl</code> with the prototype: <code>exports.getUrl = function(routeName, params, fullUrl)</code>.</p>
+<p>As you can see it accepts 3 parameters of which the last 2 are optional:</p>
+<ul>
+<li><code>routeName</code> [<code>String</code>] - Name of the route added to the <code>Router</code>.</li>
+<li><code>params</code> [<code>Object</code>] - An object which sets parameters to the route if it has them.</li>
+<li><code>fullUrl</code> [<code>Boolean</code>] - Set to <code>true</code> if you want to generate URL with a domain name (the one you specify in the <code>baseDomain</code> option before your bootstrap your application).</li>
+</ul>
+<p>You can generate URL from within the view like this:</p>
+<pre><code class="lang-Jade">!= helper(<span class="hljs-string">"url"</span>).getUrl(<span class="hljs-string">"auth-login"</span>)
+</code></pre>
+<p>or</p>
+<pre><code class="lang-Jade">a(<span class="hljs-name">href=</span>(<span class="hljs-name">helper</span>(<span class="hljs-string">"url"</span>).getUrl(<span class="hljs-string">"auth-login"</span>)))
+</code></pre>
+<p>You can also generate URL from any other part of your application like this:</p>
+<pre><code class="lang-js"><span class="hljs-variable"><span class="hljs-keyword">var</span> app</span> = require(<span class="hljs-string">"carbon-framework"</span>);
+
+<span class="hljs-variable"><span class="hljs-keyword">var</span> fullLoginUrl</span> = app.Helper.Url.getUrl(<span class="hljs-string">"auth-login"</span>, {}, <span class="hljs-literal">true</span>);
+</code></pre>
+<h2 id="who-is-using-it">Who is using it</h2>
+<p>The CarbonJS is running one of our web applications: <a href="https://www.timelinity.com">Timelinity</a></p>
+<h2 id="contributing">Contributing</h2>
+<p>If you&#39;re willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - <a href="https://github.com/choxnox">Amir Ahmetovic</a></p>
+</body></html>
