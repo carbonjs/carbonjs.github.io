@@ -1,5 +1,5 @@
 # CarbonJS Forms / `carbon-form` <a id="intro"></a>
-The `carbon-form` module provides Zend-like forms in your projects. It is a complete solution which not only provides rendering but filtering and validation too. It packs all the logic behind HTML forms and it abstracts a lot of work so that you can focus on building awesome web applications and best of all it allows you to define the layout and style your forms any way you want them.
+The `carbon-form` module provides easy-to-use forms in your projects. It is a complete solution which not only provides rendering but filtering and validation too. It packs all the logic behind HTML forms and it abstracts a lot of work so that you can focus on building awesome web applications and best of all it allows you to define the layout and style your forms any way you want them.
 
 If you have ever used `Zend_Form` before you're going to be familiar with the syntax and if not just keep reading.
 
@@ -21,10 +21,10 @@ var Validate = require("carbon-validate");
 
 module.exports = exports = function(options) {
     var form = new Form(options);
-    
+
     form.setAction("/signup");
     form.setViewScriptFile("forms/signup.jade");
-    
+
     form.addElements([
         new Form.Element.Text("name", {
             label: "Name",
@@ -175,9 +175,9 @@ module.exports = function() {
                     {
                         form.render(function(err) {
                             // Now in the view all you have to do is call `!= form.render()`
-                            // (if you're using Jade engine) and it will return rendered form 
+                            // (if you're using Jade engine) and it will return rendered form
                             // as HTML all together with all errored fields
-                            
+
                             res.render("scripts/signup", {
                                 formSignup: form
                             });
@@ -185,14 +185,14 @@ module.exports = function() {
                     }
                     else
                     {
-                        // Form validation is successful and argument `values` now contains all 
-                        // field values which are filtered and validated and therefor safe 
+                        // Form validation is successful and argument `values` now contains all
+                        // field values which are filtered and validated and therefor safe
                         // to be inserted into the database
-                        
+
                         res.redirect("/signup-success");
                     }
                 });
-                
+
             }
 		}
 	}
