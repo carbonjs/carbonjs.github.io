@@ -60,8 +60,8 @@ _paq.push(['enableLinkTracking']);
 
 pre {
   margin-bottom: 15px;
-}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-filter on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-filter#stargazers_count" data-count-href="/carbonjs/carbon-filter/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-filter" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#stand-alone">Stand-alone</a></li><li><a href="#with-carbon-form">With carbon-form</a></li></ul></li><li><a href="#filters">Filters</a><ul class="nav"><li><a href="#stringtrim-filter">StringTrim filter</a></li><li><a href="#striptags-filter">StripTags filter</a></li></ul></li><li><a href="#who-is-using-it">Who is using it</a></li><li><a href="#contributing">Contributing</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-filters-carbon-filter-a-id-intro-a-">CarbonJS Filters / <code>carbon-filter</code> <a id="intro"></a></h1>
-<p>The <code>carbon-filter</code> module provides Zend-like set of commonly used data filters. This means you can run your data through a set of filters after you&#39;ve received user&#39;s input or before you insert data into your database. You can use it as a stand-alone module or most commonly with <code>carbon-form</code> module which filters form data automatically for you.</p>
+}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-filter on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-filter#stargazers_count" data-count-href="/carbonjs/carbon-filter/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-filter" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#stand-alone">Stand-alone</a></li><li><a href="#with-carbon-form">With carbon-form</a></li></ul></li><li><a href="#filters">Filters</a><ul class="nav"><li><a href="#stringtrim-filter">StringTrim filter</a></li><li><a href="#striptags-filter">StripTags filter</a></li></ul></li><li><a href="#contributing">Contributing</a></li><li><a href="#licence">Licence</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-filters-carbon-filter-a-id-intro-a-">CarbonJS Filters / <code>carbon-filter</code> <a id="intro"></a></h1>
+<p>The <code>carbon-filter</code> module provides a set of commonly used data filters. This means you can run your data through a set of filters after you&#39;ve received user&#39;s input or before you insert data into your database. You can use it as a stand-alone module or most commonly with <code>carbon-form</code> module which filters form data automatically for you.</p>
 <p>If you&#39;ve ever worked with any <code>Zend_Filter</code> filter from the Zend Framework you will be familiar with it&#39;s sintax and if you haven&#39;t then scroll down to the &quot;Usage&quot; section and you&#39;ll be up-and-running in no time.</p>
 <h2 id="installation-a-id-installation-a-">Installation <a id="installation"></a></h2>
 <pre><code>npm install carbon-<span class="hljs-built_in">filter</span> [<span class="hljs-comment">--save]</span>
@@ -75,7 +75,7 @@ pre {
 <pre><code class="lang-js"><span class="hljs-variable"><span class="hljs-keyword">var</span> Filter</span> = require(<span class="hljs-string">"carbon-filter"</span>);
 
 <span class="hljs-variable"><span class="hljs-keyword">var</span> stripTags</span> = new Filter.StripTags({
-    allowedTags: [<span class="hljs-string">"div"</span>, <span class="hljs-string">"span"</span>, <span class="hljs-string">"h1"</span>, <span class="hljs-string">"br"</span>] 
+    allowedTags: [<span class="hljs-string">"div"</span>, <span class="hljs-string">"span"</span>, <span class="hljs-string">"h1"</span>, <span class="hljs-string">"br"</span>]
 });
 
 <span class="hljs-variable"><span class="hljs-keyword">var</span> inputValue</span> = <span class="hljs-string">"..."</span>;
@@ -110,8 +110,11 @@ form.addElements([
 <li><code>allowedTags</code> [<code>Array</code>] - Tags from the input that you want to keep in the output.</li>
 <li><code>allowedAttributes</code> [<code>Array</code>] - Attributes of HTML tags from the input that you want to keep in the output.</li>
 </ul>
-<h2 id="who-is-using-it-a-id-who-is-using-it-a-">Who is using it <a id="who-is-using-it"></a></h2>
-<p>The <code>carbon-filter</code> module is one of many that is running behind our web application: <a href="https://www.timelinity.com">Timelinity</a></p>
 <h2 id="contributing-a-id-contributing-a-">Contributing <a id="contributing"></a></h2>
 <p>If you&#39;re willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - <a href="https://github.com/choxnox">Amir Ahmetovic</a></p>
+<h2 id="licence-a-id-licence-a-">Licence <a id="licence"></a></h2>
+<p>This software is available under the following licenses:</p>
+<ul>
+<li>MIT</li>
+</ul>
 </div></div></div></body></html>

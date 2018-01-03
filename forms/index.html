@@ -60,8 +60,8 @@ _paq.push(['enableLinkTracking']);
 
 pre {
   margin-bottom: 15px;
-}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-form on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-form#stargazers_count" data-count-href="/carbonjs/carbon-form/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-form" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#define-the-form">Define the form</a></li><li><a href="#define-form-layout">Define form layout</a></li><li><a href="#validation-and-rendering">Validation and rendering</a></li></ul></li><li><a href="#elements">Elements</a></li><li><a href="#subforms">Subforms</a></li><li><a href="#who-is-using-it">Who is using it</a></li><li><a href="#contributing">Contributing</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-forms-carbon-form-a-id-intro-a-">CarbonJS Forms / <code>carbon-form</code> <a id="intro"></a></h1>
-<p>The <code>carbon-form</code> module provides Zend-like forms in your projects. It is a complete solution which not only provides rendering but filtering and validation too. It packs all the logic behind HTML forms and it abstracts a lot of work so that you can focus on building awesome web applications and best of all it allows you to define the layout and style your forms any way you want them.</p>
+}</style></head><body><div id="header"><div class="container"><div style="position: relative" class="pull-left"><a href="//www.carbonjs.com"><img src="../assets/carbonjs/images/logo.png"></a><a aria-label="Follow @carbonjs on GitHub" data-count-aria-label="# followers on GitHub" data-count-api="/users/carbonjs#followers" data-count-href="/carbonjs/followers" href="https://github.com/carbonjs" class="github-button">Follow @carbonjs</a></div><div class="pull-right"><ul><li><a href="/">Home</a></li><li><a href="/framework">Framework</a></li><li><a href="/forms">Forms</a></li><li><a href="/validators">Validators</a></li><li><a href="/filters">Filters</a></li></ul></div></div></div><div class="container"><div class="row"><div class="col-md-3"><h1><a aria-label="Star carbonjs/carbon-form on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/carbonjs/carbon-form#stargazers_count" data-count-href="/carbonjs/carbon-form/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/carbonjs/carbon-form" class="github-button">Star</a></h1><nav class="affix-top"><ul class="nav"><li><a href="#intro">Introduction</a></li><li><a href="#installation">Installation</a></li><li><a href="#usage">Usage</a><ul class="nav"><li><a href="#define-the-form">Define the form</a></li><li><a href="#define-form-layout">Define form layout</a></li><li><a href="#validation-and-rendering">Validation and rendering</a></li></ul></li><li><a href="#elements">Elements</a></li><li><a href="#subforms">Subforms</a></li><li><a href="#contributing">Contributing</a></li><li><a href="#licence">Licence</a></li></ul></nav></div><div class="col-md-9"><h1 id="carbonjs-forms-carbon-form-a-id-intro-a-">CarbonJS Forms / <code>carbon-form</code> <a id="intro"></a></h1>
+<p>The <code>carbon-form</code> module provides easy-to-use forms in your projects. It is a complete solution which not only provides rendering but filtering and validation too. It packs all the logic behind HTML forms and it abstracts a lot of work so that you can focus on building awesome web applications and best of all it allows you to define the layout and style your forms any way you want them.</p>
 <p>If you have ever used <code>Zend_Form</code> before you&#39;re going to be familiar with the syntax and if not just keep reading.</p>
 <h2 id="installation-a-id-installation-a-">Installation <a id="installation"></a></h2>
 <pre><code>npm <span class="hljs-keyword">install</span> carbon-<span class="hljs-keyword">form</span> [<span class="hljs-comment">--save]</span>
@@ -223,7 +223,7 @@ module.exports = exports = function(options) {
                     {
                         form.render(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
                             <span class="hljs-comment">// Now in the view all you have to do is call `!= form.render()`</span>
-                            <span class="hljs-comment">// (if you're using Jade engine) and it will return rendered form </span>
+                            <span class="hljs-comment">// (if you're using Jade engine) and it will return rendered form</span>
                             <span class="hljs-comment">// as HTML all together with all errored fields</span>
 
                             res.render(<span class="hljs-string">"scripts/signup"</span>, {
@@ -233,8 +233,8 @@ module.exports = exports = function(options) {
                     }
                     <span class="hljs-keyword">else</span>
                     {
-                        <span class="hljs-comment">// Form validation is successful and argument `values` now contains all </span>
-                        <span class="hljs-comment">// field values which are filtered and validated and therefor safe </span>
+                        <span class="hljs-comment">// Form validation is successful and argument `values` now contains all</span>
+                        <span class="hljs-comment">// field values which are filtered and validated and therefor safe</span>
                         <span class="hljs-comment">// to be inserted into the database</span>
 
                         res.redirect(<span class="hljs-string">"/signup-success"</span>);
@@ -257,8 +257,11 @@ module.exports = exports = function(options) {
 
 parentForm.addSubForm(<span class="hljs-string">"buttons"</span>, buttons);
 </code></pre>
-<h2 id="who-is-using-it-a-id-who-is-using-it-a-">Who is using it <a id="who-is-using-it"></a></h2>
-<p>The <code>carbon-form</code> is one of many that is running behind our web application: <a href="https://www.timelinity.com">Timelinity</a></p>
 <h2 id="contributing-a-id-contributing-a-">Contributing <a id="contributing"></a></h2>
 <p>If you&#39;re willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - <a href="https://github.com/choxnox">Amir Ahmetovic</a></p>
+<h2 id="licence-a-id-licence-a-">Licence <a id="licence"></a></h2>
+<p>This software is available under the following licenses:</p>
+<ul>
+<li>MIT</li>
+</ul>
 </div></div></div></body></html>
