@@ -214,8 +214,10 @@ var buttons = new Form();
 parentForm.addSubForm("buttons", buttons);
 ```
 
-## Who is using it <a id="who-is-using-it"></a>
-The `carbon-form` is one of many that is running behind our web application: [Timelinity](https://www.timelinity.com)
-
 ## Contributing <a id="contributing"></a>
 If you're willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - [Amir Ahmetovic](https://github.com/choxnox)
+
+## Licence <a id="licence"></a>
+This software is available under the following licenses:
+
+  * MIT

@@ -535,8 +535,10 @@ var app = require("carbon-framework");
 var fullLoginUrl = app.Helper.Url.getUrl("auth-login", {}, true);
 ```
 
-## Who is using it <a id="who-is-using-it"></a>
-The CarbonJS is running one of our web applications: [Timelinity](https://www.timelinity.com)
-
 ## Contributing <a id="contributing"></a>
 If you're willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - [Amir Ahmetovic](https://github.com/choxnox)
+
+## Licence <a id="licence"></a>
+This software is available under the following licenses:
+
+  * MIT

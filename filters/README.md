@@ -60,8 +60,10 @@ Strips HTML tags from the input. You can specify which tags or attributes you'd 
 * `allowedTags` [`Array`] - Tags from the input that you want to keep in the output.
 * `allowedAttributes` [`Array`] - Attributes of HTML tags from the input that you want to keep in the output.
 
-## Who is using it <a id="who-is-using-it"></a>
-The `carbon-filter` module is one of many that is running behind our web application: [Timelinity](https://www.timelinity.com)
-
 ## Contributing <a id="contributing"></a>
 If you're willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - [Amir Ahmetovic](https://github.com/choxnox)
+
+## Licence <a id="licence"></a>
+This software is available under the following licenses:
+
+  * MIT

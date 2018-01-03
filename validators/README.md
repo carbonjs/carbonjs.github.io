@@ -137,8 +137,10 @@ Checks if the value is valid URL.
 * `messages`
   * `invalid_url` - Messages which is returned if the input value is not valid URL.
 
-## Who is using it <a id="who-is-using-it"></a>
-The `carbon-validate` module is one of many that is running behind our web application: [Timelinity](https://www.timelinity.com)
-
 ## Contributing <a id="contributing"></a>
 If you're willing to contribute to this project feel free to report issues, send pull request, write tests or simply contact me - [Amir Ahmetovic](https://github.com/choxnox)
+
+## Licence <a id="licence"></a>
+This software is available under the following licenses:
+
+  * MIT
